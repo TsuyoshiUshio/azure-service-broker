@@ -1,6 +1,6 @@
 # Azure Service Broker
 
-[Azure Service Broker](https://github.com/deis/azure-service-broker) is the
+[Azure Service Broker](https://github.com/Azure/azure-service-broker) is the
 open source, [Open Service Broker](https://www.openservicebrokerapi.org/)
 compatible API server that provisions managed services in the Microsoft
 Azure public cloud.
@@ -11,7 +11,7 @@ This chart bootstraps Azure Service Broker in your Kubernetes cluster.
 
 - [Kubernetes](https://kubernetes.io/) 1.7+ with RBAC enabled
 - The
-  [Kubernetes Service Catalog](https://github.com/kubernetes-incubator/service-catalog/blob/master/docs/install-1.7.md)
+  [Kubernetes Service Catalog](https://github.com/kubernetes-incubator/service-catalog/blob/master/docs/install.md)
   software has been installed
 - An [Azure subscription](https://azure.microsoft.com/en-us/free/)
 - The Azure CLI: You can
@@ -72,7 +72,7 @@ Then proceed with cloning this repository:
 
 ```console
 $ mkdir -p $GOPATH/src/github.com/Azure
-$ git clone git@github.com:deis/azure-service-broker.git \
+$ git clone git@github.com:Azure/azure-service-broker.git \
     $GOPATH/src/github.com/Azure/azure-service-broker
 ```
 
@@ -90,6 +90,16 @@ $ helm install . --name asb --namespace asb \
 This command deploys the Azure Service Broker on your Kubernetes cluster in the
 default configuration. The [configuration](#configuration) section lists the
 parameters that can optionally be configured during installation.
+
+To verify the service broker has been deployed and show installed service classes and plans:
+
+```console
+$ kubectl get clusterservicebroker -o yaml
+
+$ kubectl get clusterserviceclasses -o=custom-columns=NAME:.metadata.name,EXTERNAL\ NAME:.spec.externalName
+
+$ kubectl get clusterserviceplans -o=custom-columns=NAME:.metadata.name,EXTERNAL\ NAME:.spec.externalName,SERVICE\ CLASS:.spec.clusterServiceClassRef.name --sort-by=.spec.clusterServiceClassRef.name
+```
 
 ## Uninstalling the Chart
 
@@ -109,7 +119,7 @@ Broker chart and their default values.
 
 | Parameter | Description | Default |
 | --------- | ----------- | ------- |
-| `image.repository` | Docker image location, _without_ the tag. | `"quay.io/deisci/azure-service-broker"` |
+| `image.repository` | Docker image location, _without_ the tag. | `"microsoft/azure-service-broker"` |
 | `image.tag` | Tag / version of the Docker image. | `"canary"`; This references an image built from the very latest, possibly unreleased source code. This value is temporary and will change once ASB and its chart both stabilize. At that time, each revision of the chart will reference a specific ASB version using an _immutable_ tag, such as a semantic version. |
 | `image.pullPolicy` | `"IfNotPresent"`, `"Always"`, or `"Never"`; When launching a pod, this option indicates when to pull the ASB Docker image. | `"Always"`; This policy complements the use of the mutable `canary` tag. This value is temporary and will change once ASB and its chart both stabalize and begin to reference images using _immutable_ tags, such as semantic versions. |
 | `registerBroker` | Whether to register this broker with the Kubernetes Service Catalog. If true, the Kubernetes Service Catalog must already be installed on the cluster. Marking this option false is useful for scenarios wherein one wishes to host the broker in a separate cluster than the Service Catalog (or other client) that will access it. | `true` |

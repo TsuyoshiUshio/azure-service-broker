@@ -21,7 +21,7 @@ signed the CLA can be accepted into the repository.
 
 This is an open source project and as such no formal support is available.
 However, like all good open source projects we do offer "best effort" support
-through [github issues](https://github.com/deis/azure-service-broker/issues).
+through [github issues](https://github.com/Azure/azure-service-broker/issues).
 
 Before opening a new issue or submitting a new pull request, it's helpful to
 search the project - it's likely that another user has already reported the
@@ -66,6 +66,9 @@ follow the same general lifecycle. Differences are noted below.
 (see details above).
 2. Fork the repository, develop and test your code changes.
 3. Submit a pull request.
+
+Your pull request will be reviewed according to the process defined in 
+[reviewing.md](./reviewing.md).
 
 ## Code of conduct
 
